@@ -14,7 +14,7 @@ describe('Stock/actions', () => {
       expect(action).toEqual(expectedAction);
     });
   });
-  
+
   describe('fetchStocksFailure()', () => {
     it('should create a FETCH_STOCKS_FAILURE action', () => {
       const ex = {};
@@ -24,6 +24,20 @@ describe('Stock/actions', () => {
       };
       
       const action = actions.fetchStocksFailure(ex);
+
+      expect(action).toEqual(expectedAction);
+    });
+  });
+
+  describe('fetchStocksSucess()', () => {
+    it('should create a FETCH_STOCKS_SUCCESS action', () => {
+      const stocks = [];
+      const expectedAction = {
+        type: actions.FETCH_STOCKS_SUCCESS,
+        stocks
+      };
+      
+      const action = actions.fetchStocksSuccess(stocks);
 
       expect(action).toEqual(expectedAction);
     });
