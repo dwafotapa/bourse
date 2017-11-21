@@ -14,4 +14,18 @@ describe('Stock/actions', () => {
       expect(action).toEqual(expectedAction);
     });
   });
+  
+  describe('fetchStocksFailure()', () => {
+    it('should create a FETCH_STOCKS_FAILURE action', () => {
+      const ex = {};
+      const expectedAction = {
+        type: actions.FETCH_STOCKS_FAILURE,
+        ex
+      };
+      
+      const action = actions.fetchStocksFailure(ex);
+
+      expect(action).toEqual(expectedAction);
+    });
+  });
 });
