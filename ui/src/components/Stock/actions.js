@@ -1,3 +1,6 @@
+import config from '../../config';
+import { handleErrors } from '../../utils/fetch';
+
 export const FETCH_STOCKS_REQUEST = 'FETCH_STOCKS_REQUEST';
 export const FETCH_STOCKS_FAILURE = 'FETCH_STOCKS_FAILURE';
 export const FETCH_STOCKS_SUCCESS = 'FETCH_STOCKS_SUCCESS';
@@ -15,3 +18,14 @@ export const fetchStocksSuccess = (stocks) => ({
   type: FETCH_STOCKS_SUCCESS,
   stocks
 });
+
+export const fetchStocks = () => {
+  return (dispatch) => {
+    dispatch(fetchStocksRequest());
+    const url = config.getUrl('API_STOCKS_URL');
+    return fetch(url)
+      .then(handleErrors)
+      .then(json => dispatch(fetchStocksSuccess(json.stocks)))
+      .catch(ex => dispatch(fetchStocksFailure(ex)));
+  };
+};
