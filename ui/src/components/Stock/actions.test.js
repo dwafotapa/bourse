@@ -65,11 +65,19 @@ describe('Stock/actions', () => {
     it('should dispatch a FETCH_STOCKS_REQUEST action then a FETCH_STOCKS_FAILURE action if the request fails', () => {
       const stocks = [
         {
-          "timestamp": 1511299207875,
-          "index": 51,
+          "timestamp": 1511342109035,
+          "index": 1,
           "stocks": {
-            "NASDAQ": 3.320720865311833,
-            "CAC40": 461.4659496471544
+            "NASDAQ": 17.016772978820796,
+            "CAC40": 142.87102558704638
+          }
+        },
+        {
+          "timestamp": 1511342110039,
+          "index": 2,
+          "stocks": {
+            "NASDAQ": 17.025985349921516,
+            "CAC40": 145.49123235462636
           }
         }
       ];

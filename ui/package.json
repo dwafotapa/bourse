@@ -93,6 +93,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "deep-freeze": "^0.0.1",
     "redux-devtools": "^3.4.1",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",
