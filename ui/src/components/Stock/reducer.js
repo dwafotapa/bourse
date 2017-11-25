@@ -9,7 +9,8 @@ const stocks = (state = initialState, action) => {
     case 'FETCH_STOCKS_REQUEST':
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
+        hasFetchFailed: false
       };
     case 'FETCH_STOCKS_FAILURE':
       return {
@@ -21,8 +22,8 @@ const stocks = (state = initialState, action) => {
       return {
         ...state,
         isFetching: false,
-        ids: action.ids,
-        byId: action.stocks
+        hasFetchFailed: false,
+        items: action.stocks
       };
     default:
       return state;

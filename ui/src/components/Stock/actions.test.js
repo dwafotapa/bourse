@@ -85,7 +85,7 @@ describe('Stock/actions', () => {
         return new Promise((resolve, reject) => {
           resolve({
             ok: true,
-            json: () => ({ stocks })
+            json: () => stocks
           });
         });
       });

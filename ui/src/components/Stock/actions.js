@@ -25,7 +25,7 @@ export const fetchStocks = () => {
     const url = config.getUrl('API_STOCKS_URL');
     return fetch(url)
       .then(handleErrors)
-      .then(json => dispatch(fetchStocksSuccess(json.stocks)))
+      .then(json => dispatch(fetchStocksSuccess(json)))
       .catch(ex => dispatch(fetchStocksFailure(ex)));
   };
 };
