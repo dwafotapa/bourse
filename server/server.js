@@ -45,6 +45,7 @@ function tail (count) {
 }
 
 http.createServer(function (request, response) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
   response.writeHead(200, {"Content-Type": "application/json"});
   var query = url.parse(request.url, true).query;
   var count = query.count ? query.count - 0 : 0;
