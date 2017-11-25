@@ -6,7 +6,8 @@ const setup = () => {
   const props = {
     isFetching: false,
     hasFetchFailed: false,
-    items: [],
+    ids: [],
+    byId: {},
     fetchStocks: jest.fn()
   };
   

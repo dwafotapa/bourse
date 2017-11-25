@@ -1,5 +1,7 @@
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import { normalize } from 'normalizr';
+import * as schema from './schema';
 import * as actions from './actions';
 
 const middlewares = [ thunk ];
@@ -32,13 +34,15 @@ describe('Stock/actions', () => {
 
   describe('fetchStocksSucess()', () => {
     it('should create a FETCH_STOCKS_SUCCESS action', () => {
-      const stocks = [];
+      const ids = [];
+      const byId = {};
       const expectedAction = {
         type: actions.FETCH_STOCKS_SUCCESS,
-        stocks
+        ids,
+        byId
       };
       
-      const action = actions.fetchStocksSuccess(stocks);
+      const action = actions.fetchStocksSuccess(ids, byId);
 
       expect(action).toEqual(expectedAction);
     });
@@ -90,9 +94,10 @@ describe('Stock/actions', () => {
         });
       });
       const store = mockStore();
+      const normalized = normalize(stocks, schema.stocks);
       const expectedActions = [
         { type: actions.FETCH_STOCKS_REQUEST },
-        { type: actions.FETCH_STOCKS_SUCCESS, stocks}
+        { type: actions.FETCH_STOCKS_SUCCESS, ids: normalized.result, byId: normalized.entities.stocks }
       ];
       
       return store.dispatch(actions.fetchStocks()).then(() => {

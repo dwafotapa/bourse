@@ -1,7 +1,8 @@
 const initialState = {
   isFetching: false,
   hasFetchFailed: false,
-  items: []
+  ids: [],
+  byId: {}
 };
 
 const stocks = (state = initialState, action) => {
@@ -23,7 +24,8 @@ const stocks = (state = initialState, action) => {
         ...state,
         isFetching: false,
         hasFetchFailed: false,
-        items: action.stocks
+        ids: action.ids,
+        byId: action.byId
       };
     default:
       return state;

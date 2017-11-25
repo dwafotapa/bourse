@@ -1,3 +1,5 @@
+import { normalize } from 'normalizr';
+import * as schema from './schema';
 import config from '../../config';
 import { handleErrors } from '../../utils/fetch';
 
@@ -14,18 +16,24 @@ export const fetchStocksFailure = (ex) => ({
   ex
 });
 
-export const fetchStocksSuccess = (stocks) => ({
+export const fetchStocksSuccess = (ids, byId) => ({
   type: FETCH_STOCKS_SUCCESS,
-  stocks
+  ids,
+  byId
 });
 
 export const fetchStocks = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetchStocksRequest());
     const url = `${config.get('API_STOCKS_URL')}?count=${config.get('NUMBER_OF_VALUES')}`;
-    return fetch(url)
-      .then(handleErrors)
-      .then(json => dispatch(fetchStocksSuccess(json)))
-      .catch(ex => dispatch(fetchStocksFailure(ex)));
+    try {
+      const response = await fetch(url);
+      const json = await handleErrors(response);
+      const normalized = normalize(json, schema.stocks);
+      console.log(json);
+      dispatch(fetchStocksSuccess(normalized.result, normalized.entities.stocks));
+    } catch (ex) {
+      dispatch(fetchStocksFailure(ex));
+    }
   };
 };

@@ -4,13 +4,15 @@ import { fetchStocks } from './actions';
 import {
   getIsFetching,
   getHasFetchFailed,
-  getStocks
+  getIds,
+  getById
 } from './selectors';
 
 const mapStateToProps = (state) => ({
   isFetching: getIsFetching(state),
   hasFetchFailed: getHasFetchFailed(state),
-  items: getStocks(state)
+  ids: getIds(state),
+  byId: getById(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

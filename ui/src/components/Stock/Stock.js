@@ -16,7 +16,8 @@ class Stock extends Component {
 Stock.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   hasFetchFailed: PropTypes.bool.isRequired,
-  items: PropTypes.array.isRequired,
+  ids: PropTypes.array.isRequired,
+  byId: PropTypes.object.isRequired,
   fetchStocks: PropTypes.func.isRequired
 };
 
