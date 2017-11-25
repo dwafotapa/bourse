@@ -7,8 +7,42 @@ class Stock extends Component {
   }
 
   render() {
+    const { ids, byId } = this.props;
     return (
-      <div>Stock</div>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>CAC40</th>
+              {
+                ids.map((id) => (
+                  <td>
+                    <input
+                      type="text"
+                      value={ byId[id].stocks.CAC40.toFixed(2) }
+                      onChange={true}
+                    />
+                  </td>
+                ))
+              }
+            </tr>
+            <tr>
+              <th>NASDAQ</th>
+              {
+                ids.map((id) => (
+                  <td>
+                    <input
+                      type="text"
+                      value={ byId[id].stocks.NASDAQ.toFixed(2) }
+                      onChange={true}
+                    />
+                  </td>
+                ))
+              }
+            </tr>
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
