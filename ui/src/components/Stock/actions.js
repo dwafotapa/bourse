@@ -22,7 +22,7 @@ export const fetchStocksSuccess = (stocks) => ({
 export const fetchStocks = () => {
   return (dispatch) => {
     dispatch(fetchStocksRequest());
-    const url = config.getUrl('API_STOCKS_URL');
+    const url = `${config.get('API_STOCKS_URL')}?count=${config.get('NUMBER_OF_VALUES')}`;
     return fetch(url)
       .then(handleErrors)
       .then(json => dispatch(fetchStocksSuccess(json)))
