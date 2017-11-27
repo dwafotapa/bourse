@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { fromJS } from 'immutable';
 
 class Stock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ids: props.ids,
-      byId: props.byId
+      ids: fromJS(props.ids),
+      byId: fromJS(props.byId)
     };
   }
 
@@ -15,39 +16,30 @@ class Stock extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const byId = nextProps.ids.reduce((acc, id) => {
-      acc[id] = { ...nextProps.byId[id] };
-      acc[id].byMarket = { ...nextProps.byId[id].byMarket };
-      return acc;
-    }, {});
     this.setState({
-      ids: nextProps.ids,
-      byId
+      ids: fromJS(nextProps.ids),
+      byId: fromJS(nextProps.byId)
     });
   }
   
   handleInputChange = (id, market, e) => {
     const { value } = e.target;
-    if (value) {
-      this.setState((prevState) => {
-        const { byMarket } = { ...prevState.byId[id] };
-        byMarket[market] = value;
-        return {
-          byId: {
-            ...prevState.byId,
-            [id]: {
-              ...prevState.byId[id],
-              byMarket
-            }
-          }
-        };
-      });
+    if (!isNaN(value)) {
+      this.setState((prevState) => ({
+        byId: prevState.byId.setIn([id.toString(), 'byMarket', market], Number(value))
+      }));
+    }
+  }
+
+  handleInputKeyUp = (e) => {
+    if (e.which === 13) {
+      e.target.blur();
     }
   }
   
   handleInputBlur = (id, market) => {
-    if (this.state.byId[id].byMarket[market] !== this.props.byId[id].byMarket[market]) {
-      this.props.setStock(id, market, this.state.byId[id].byMarket[market]);
+    if (this.state.byId.getIn([id.toString(), 'byMarket', market]) !== this.props.byId[id].byMarket[market]) {
+      this.props.setStock(id, market, this.state.byId.getIn([id.toString(), 'byMarket', market]));
     }
   }
 
@@ -77,8 +69,9 @@ class Stock extends Component {
                   <td key={id}>
                     <input
                       type="text"
-                      value={Number(byId[id].byMarket.CAC40)}
+                      value={byId.getIn([id.toString(), 'byMarket', 'CAC40'])}
                       onChange={(e) => this.handleInputChange(id, 'CAC40', e)}
+                      onKeyUp={(e) => this.handleInputKeyUp(e)}
                       onBlur={() => this.handleInputBlur(id, 'CAC40')}
                     />
                   </td>
@@ -92,8 +85,9 @@ class Stock extends Component {
                   <td key={id}>
                     <input
                       type="text"
-                      value={Number(byId[id].byMarket.NASDAQ)}
+                      value={byId.getIn([id.toString(), 'byMarket', 'NASDAQ'])}
                       onChange={(e) => this.handleInputChange(id, 'NASDAQ', e)}
+                      onKeyUp={(e) => this.handleInputKeyUp(e)}
                       onBlur={() => this.handleInputBlur(id, 'NASDAQ')}
                     />
                   </td>
