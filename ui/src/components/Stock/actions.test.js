@@ -94,7 +94,7 @@ describe('Stock/actions', () => {
         });
       });
       const store = mockStore();
-      const normalized = normalize(stocks, schema.stocks);
+      const normalized = normalize(stocks, schema.arrayOfStocks);
       const expectedActions = [
         { type: actions.FETCH_STOCKS_REQUEST },
         { type: actions.FETCH_STOCKS_SUCCESS, ids: normalized.result, byId: normalized.entities.stocks }
@@ -103,6 +103,24 @@ describe('Stock/actions', () => {
       return store.dispatch(actions.fetchStocks()).then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
+    });
+  });
+
+  describe('setStock()', () => {
+    it('should create a SET_STOCK action', () => {
+      const id = 1;
+      const market = 'CAC40';
+      const stock = 123.456789;
+      const expectedAction = {
+        type: actions.SET_STOCK,
+        id,
+        market,
+        stock
+      };
+      
+      const action = actions.setStock(id, market, stock);
+
+      expect(action).toEqual(expectedAction);
     });
   });
 });

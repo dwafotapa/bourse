@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Stock from './Stock';
-import { fetchStocks } from './actions';
+import { fetchStocks, setStock } from './actions';
 import {
   getIsFetching,
   getHasFetchFailed,
@@ -18,6 +18,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   fetchStocks: () => {
     dispatch(fetchStocks());
+  },
+  setStock: (id, market, stock) => {
+    dispatch(setStock(id, market, stock));
   }
 });
 

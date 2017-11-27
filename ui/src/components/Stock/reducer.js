@@ -1,3 +1,5 @@
+import * as actions from './actions';
+
 const initialState = {
   isFetching: false,
   hasFetchFailed: false,
@@ -7,19 +9,19 @@ const initialState = {
 
 const stocks = (state = initialState, action) => {
   switch (action.type) {
-    case 'FETCH_STOCKS_REQUEST':
+    case actions.FETCH_STOCKS_REQUEST:
       return {
         ...state,
         isFetching: true,
         hasFetchFailed: false
       };
-    case 'FETCH_STOCKS_FAILURE':
+    case actions.FETCH_STOCKS_FAILURE:
       return {
         ...state,
         isFetching: false,
         hasFetchFailed: true
       };
-    case 'FETCH_STOCKS_SUCCESS':
+    case actions.FETCH_STOCKS_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -27,6 +29,20 @@ const stocks = (state = initialState, action) => {
         ids: action.ids,
         byId: action.byId
       };
+    case actions.SET_STOCK:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            ...state.byId[action.id],
+            byMarket: {
+              ...state.byId[action.id].byMarket,
+              [action.market]: action.stock
+            }
+          }
+        }
+      }
     default:
       return state;
   }
