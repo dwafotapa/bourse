@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 class Stock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ids: fromJS(props.ids),
+      ids: List(props.ids),
       byId: fromJS(props.byId)
     };
   }
@@ -17,7 +17,7 @@ class Stock extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      ids: fromJS(nextProps.ids),
+      ids: List(nextProps.ids),
       byId: fromJS(nextProps.byId)
     });
   }
@@ -38,7 +38,7 @@ class Stock extends Component {
   }
   
   handleInputBlur = (id, market) => {
-    if (this.state.byId.getIn([id.toString(), 'byMarket', market]) !== this.props.byId[id].byMarket[market]) {
+    if (this.state.byId.getIn([id.toString(), 'byMarket', market]) !== this.props.byId.getIn([id.toString(), 'byMarket', market])) {
       this.props.setStock(id, market, this.state.byId.getIn([id.toString(), 'byMarket', market]));
     }
   }
@@ -104,7 +104,7 @@ class Stock extends Component {
 Stock.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   hasFetchFailed: PropTypes.bool.isRequired,
-  ids: PropTypes.array.isRequired,
+  ids: PropTypes.object.isRequired,
   byId: PropTypes.object.isRequired,
   fetchStocks: PropTypes.func.isRequired
 };
