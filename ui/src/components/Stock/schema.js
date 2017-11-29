@@ -6,12 +6,10 @@ export const stockEntity = new schema.Entity(
   {
     idAttribute: 'index',
     processStrategy: (entity) => ({
-      timestamp: entity.timestamp,
       id: entity.index,
-      byMarket: {
-        NASDAQ: Number(entity.stocks.NASDAQ.toFixed(2)),
-        CAC40: Number(entity.stocks.CAC40.toFixed(2))
-      }
+      NASDAQ: entity.stocks.NASDAQ.toFixed(2),
+      CAC40: entity.stocks.CAC40.toFixed(2),
+      timestamp: entity.timestamp
     })
   }
 );

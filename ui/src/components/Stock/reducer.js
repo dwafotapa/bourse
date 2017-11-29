@@ -1,11 +1,11 @@
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import * as actions from './actions';
 
 const initialState = {
   isFetching: false,
   hasFetchFailed: false,
-  ids: List([]),
-  byId: fromJS({})
+  ids: List(),
+  byId: Map()
 };
 
 const stocks = (state = initialState, action) => {
@@ -33,7 +33,7 @@ const stocks = (state = initialState, action) => {
     case actions.SET_STOCK:
       return {
         ...state,
-        byId: state.byId.setIn([ action.id.toString(), 'byMarket', action.market ], action.stock)
+        byId: state.byId.setIn([ action.id.toString(), action.market ], action.stock)
       };
     default:
       return state;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { fromJS, List, is } from 'immutable';
+import { fromJS, List } from 'immutable';
 import Stock from './Stock';
 
 const setup = () => {
@@ -10,20 +10,16 @@ const setup = () => {
     ids: List([ 1, 2 ]),
     byId: fromJS({
       1: {
-        timestamp: 123456789,
         id: 1,
-        byMarket: {
-          NASDAQ: 11.11,
-          CAC40: 11.11,
-        }
+        NASDAQ: '11.11',
+        CAC40: '11.11',
+        timestamp: 123456789
       },
       2: {
-        timestamp: 123456789,
         id: 2,
-        byMarket: {
-          NASDAQ: 22.22,
-          CAC40: 22.22
-        }
+        NASDAQ: '22.22',
+        CAC40: '22.22',
+        timestamp: 123456789
       }
     }),
     fetchStocks: jest.fn(),
@@ -52,31 +48,33 @@ describe('<Stock/>', () => {
     it('should set the local state with the new props', () => {
       const { props, wrapper } = setup();
       const nextProps = {
-        byId: props.byId.setIn(['1', 'byMarket', 'CAC40'], 33.33)
+        byId: props.byId.setIn(['1', 'CAC40'], '33.33')
       };
 
       wrapper.setProps(nextProps);
 
-      expect(is(wrapper.instance().props.byId, nextProps.byId)).toBe(true);
+      expect(wrapper.instance().props.byId).toEqual(nextProps.byId);
     });
   });
 
   describe('handleInputChange()', () => {
     it('should do nothing if the input value is not a number', () => {
       const { props, wrapper } = setup();
+      wrapper.setProps(props);
       
       wrapper.instance().handleInputChange(1, 'CAC40', { target: { value: 'notanumber' } });
 
-      expect(is(wrapper.instance().state.byId, wrapper.instance().props.byId)).toBe(true);
+      expect(wrapper.instance().state.byId).toEqual(wrapper.instance().props.byId);
     });
 
     it('should update the local state if the input value is a number', () => {
       const { props, wrapper } = setup();
-      const expectedValue = 40.40;
+      wrapper.setProps(props);
+      const expectedValue = '40.40';
 
-      wrapper.instance().handleInputChange(1, 'CAC40', { target: { value: expectedValue.toString() } });
+      wrapper.instance().handleInputChange(1, 'CAC40', { target: { value: expectedValue } });
 
-      expect(wrapper.instance().state.byId.getIn(['1', 'byMarket', 'CAC40'])).toBe(expectedValue);
+      expect(wrapper.instance().state.byId.getIn(['1', 'CAC40'])).toBe(expectedValue);
     });
   });
 
@@ -113,7 +111,8 @@ describe('<Stock/>', () => {
   describe('handleInputBlur()', () => {
     it('should do nothing if the local and redux states of the blurred input are in sync', () => {
       const { props, wrapper } = setup();
-
+      wrapper.setProps(props);
+      
       wrapper.instance().handleInputBlur(1, 'CAC40');
 
       expect(props.setStock.mock.calls.length).toBe(0);
@@ -121,7 +120,8 @@ describe('<Stock/>', () => {
 
     it('should dispatch a SET_STOCK action to update the redux state if the local and redux states of the blurred input are different', () => {
       const { props, wrapper } = setup();
-      wrapper.instance().state.byId = wrapper.instance().state.byId.setIn(['1', 'byMarket', 'CAC40'], 99.99);
+      wrapper.setProps(props);
+      wrapper.instance().state.byId = wrapper.instance().state.byId.setIn(['1', 'CAC40'], '99.99');
 
       wrapper.instance().handleInputBlur(1, 'CAC40');
 

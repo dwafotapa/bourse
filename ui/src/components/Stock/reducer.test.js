@@ -9,20 +9,16 @@ describe('Stock/reducers', () => {
     ids: List([ 1, 2 ]),
     byId: fromJS ({
       1: {
-        "timestamp": 1511342109035,
-        "index": 1,
-        "byMarket": {
-          "NASDAQ": 11.11,
-          "CAC40": 11.11
-        }
+        id: 1,
+        NASDAQ: '11.11',
+        CAC40: '11.11',
+        timestamp: 1511342109035
       },
       2: {
-        "timestamp": 1511342110039,
-        "index": 2,
-        "byMarket": {
-          "NASDAQ": 22.22,
-          "CAC40": 22.22
-        }
+        id: 2,
+        NASDAQ: '22.22',
+        CAC40: '22.22',
+        timestamp: 1511342110039
       }
     })
   };
@@ -62,12 +58,10 @@ describe('Stock/reducers', () => {
       const ids = [ 3 ];
       const byId = {
         3: {
-          "timestamp": 1511649230628,
-          "index": 3,
-          "byMarket": {
-            "NASDAQ": 33.33,
-            "CAC40": 33.33
-          }
+          id: 3,
+          NASDAQ: 33.33,
+          CAC40: 33.33,
+          timestamp: 1511649230628
         }
       };
       const expectedState = {
@@ -86,25 +80,21 @@ describe('Stock/reducers', () => {
         ...initialState,
         byId: fromJS({
           1: {
-            "timestamp": 1511342109035,
-            "index": 1,
-            "byMarket": {
-              "NASDAQ": 11.11,
-              "CAC40": 111.111
-            }
+            id: 1,
+            NASDAQ: '11.11',
+            CAC40: '111.111',
+            timestamp: 1511342109035
           },
           2: {
-            "timestamp": 1511342110039,
-            "index": 2,
-            "byMarket": {
-              "NASDAQ": 22.22,
-              "CAC40": 22.22
-            }
+            id: 2,
+            NASDAQ: '22.22',
+            CAC40: '22.22',
+            timestamp: 1511342110039
           }
         })
       };
 
-      const state = reducer(initialState, { type: actions.SET_STOCK, id: 1, market: 'CAC40', stock: 111.111 });
+      const state = reducer(initialState, { type: actions.SET_STOCK, id: 1, market: 'CAC40', stock: '111.111' });
 
       expect(state).toEqual(expectedState);
     });
