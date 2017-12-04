@@ -9,7 +9,7 @@ const mockStore = configureMockStore(middlewares);
 
 describe('Stock/actions', () => {
   describe('fetchStocksRequest()', () => {
-    it('should create a FETCH_STOCKS_REQUEST action', () => {
+    it('should return a FETCH_STOCKS_REQUEST action', () => {
       const expectedAction = { type: actions.FETCH_STOCKS_REQUEST };
 
       const action = actions.fetchStocksRequest();
@@ -19,7 +19,7 @@ describe('Stock/actions', () => {
   });
 
   describe('fetchStocksFailure()', () => {
-    it('should create a FETCH_STOCKS_FAILURE action', () => {
+    it('should return a FETCH_STOCKS_FAILURE action', () => {
       const ex = {};
       const expectedAction = {
         type: actions.FETCH_STOCKS_FAILURE,
@@ -32,8 +32,8 @@ describe('Stock/actions', () => {
     });
   });
 
-  describe('fetchStocksSucess()', () => {
-    it('should create a FETCH_STOCKS_SUCCESS action', () => {
+  describe('fetchStocksSuccess()', () => {
+    it('should return a FETCH_STOCKS_SUCCESS action', () => {
       const ids = [];
       const byId = {};
       const expectedAction = {
@@ -66,7 +66,7 @@ describe('Stock/actions', () => {
       });
     });
 
-    it('should dispatch a FETCH_STOCKS_REQUEST action then a FETCH_STOCKS_FAILURE action if the request fails', () => {
+    it('should dispatch a FETCH_STOCKS_REQUEST action then a FETCH_STOCKS_SUCCESS action if the request succeeds', () => {
       const stocks = [
         {
           "timestamp": 1511342109035,
@@ -107,7 +107,7 @@ describe('Stock/actions', () => {
   });
 
   describe('setStock()', () => {
-    it('should create a SET_STOCK action', () => {
+    it('should return a SET_STOCK action', () => {
       const id = 1;
       const market = 'CAC40';
       const stock = 123.456789;

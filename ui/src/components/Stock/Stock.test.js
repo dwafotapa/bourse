@@ -36,10 +36,10 @@ const setup = () => {
 
 describe('<Stock/>', () => {
   describe('render() / componentDidMount()', () => {
-    it('should render <div>Stock</div> and call fetchStocks()', () => {
+    it('should render a <table/> element and call fetchStocks()', () => {
       const { props, wrapper } = setup();
 
-      expect(wrapper.find('div')).toHaveLength(1);
+      expect(wrapper.find('table')).toHaveLength(1);
       expect(props.fetchStocks.mock.calls.length).toBe(1);
     });
   });

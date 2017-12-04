@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fromJS, List, Map } from 'immutable';
+import styles from './Stock.css';
 
 class Stock extends Component {
   constructor(props) {
@@ -71,6 +72,7 @@ class Stock extends Component {
                   <td key={id}>
                     <input
                       type="text"
+                      className={styles.StockCell}
                       value={byId.getIn([id.toString(), 'CAC40'])}
                       onChange={(e) => this.handleInputChange(id, 'CAC40', e)}
                       onKeyUp={(e) => this.handleInputKeyUp(e)}
@@ -87,6 +89,7 @@ class Stock extends Component {
                   <td key={id}>
                     <input
                       type="text"
+                      className={styles.StockCell}                      
                       value={byId.getIn([id.toString(), 'NASDAQ'])}
                       onChange={(e) => this.handleInputChange(id, 'NASDAQ', e)}
                       onKeyUp={(e) => this.handleInputKeyUp(e)}
