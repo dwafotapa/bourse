@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import Stock from './Stock';
+import { toJS } from '../../utils/to-js';
+import StockTable from './StockTable';
 import { fetchStocks, setStock } from './actions';
 import {
   getIsFetching,
@@ -24,4 +25,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stock);
+export default connect(mapStateToProps, mapDispatchToProps)(toJS(StockTable));

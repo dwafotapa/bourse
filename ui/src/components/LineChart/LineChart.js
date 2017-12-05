@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import './LineChart.css';
 
 class LineChart extends Component {
+
   componentDidMount() {
     this.renderLineChart();
   }
@@ -13,6 +15,9 @@ class LineChart extends Component {
 
   renderLineChart = () => {
     const { ids, byId } = this.props;
+    if (ids.length === 0) {
+      return;
+    }
 
     let svg = d3.select("svg");
 
@@ -22,17 +27,17 @@ class LineChart extends Component {
     const height = svg.attr("height") - margin.top - margin.bottom;
 
     // Set the ranges and domains
-    const xScale = d3.scaleTime()
-      .range([ 0, width ])
+    const xScale = d3.scaleLinear()
+      .rangeRound([ 0, width ])
       .domain([ 0, 19 ]);
     
     const yScale = d3.scaleLinear()
-      .range([ height, 0 ])
+      .rangeRound([ height, 0 ])
       .domain([ 0, d3.max(ids, (id) => byId[id].CAC40) ]);
 
     // Define the line
-    const line = d3.line()
-      .x((id) => xScale(byId[id].index))
+    let line = d3.line()
+      .x((id, index) => xScale(index))
       .y((id) => yScale(byId[id].CAC40));
     
     svg = svg.append("g")
@@ -62,5 +67,10 @@ class LineChart extends Component {
     );
   }
 }
+
+LineChart.propTypes = {
+  ids: PropTypes.array.isRequired,
+  byId: PropTypes.object.isRequired
+};
 
 export default LineChart;

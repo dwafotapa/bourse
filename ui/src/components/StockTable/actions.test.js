@@ -7,7 +7,7 @@ import * as actions from './actions';
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
 
-describe('Stock/actions', () => {
+describe('actions', () => {
   describe('fetchStocksRequest()', () => {
     it('should return a FETCH_STOCKS_REQUEST action', () => {
       const expectedAction = { type: actions.FETCH_STOCKS_REQUEST };

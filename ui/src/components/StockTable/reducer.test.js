@@ -2,7 +2,7 @@ import { fromJS, List } from 'immutable';
 import reducer from './reducer';
 import * as actions from './actions';
 
-describe('Stock/reducers', () => {
+describe('reducer', () => {
   const initialState = {
     isFetching: false,
     hasFetchFailed: false,

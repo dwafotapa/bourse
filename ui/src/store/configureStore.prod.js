@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import stocks from '../components/Stock/reducer';
+import stocks from '../components/StockTable/reducer';
 
 const rootReducer = combineReducers({ stocks });
 
