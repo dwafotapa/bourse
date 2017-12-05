@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import './LineChart.css';
 
 class LineChart extends Component {
-
   componentDidMount() {
     this.renderLineChart();
   }
@@ -36,7 +34,7 @@ class LineChart extends Component {
       .domain([ 0, d3.max(ids, (id) => byId[id].CAC40) ]);
 
     // Define the line
-    let line = d3.line()
+    const line = d3.line()
       .x((id, index) => xScale(index))
       .y((id) => yScale(byId[id].CAC40));
     
@@ -54,8 +52,10 @@ class LineChart extends Component {
 
     // Add the line path
     svg.append("path")
-      .data(ids)
-      .attr("class", "line")
+      .data([ids])
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", "2px")
       .attr("d", line);
   }
 
