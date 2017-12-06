@@ -7,7 +7,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        <LineChartContainer/>
+        <LineChartContainer
+          width="960"
+          height="500"
+        />
         <StockTableContainer/>
       </div>
     );

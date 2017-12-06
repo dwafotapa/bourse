@@ -13,7 +13,7 @@ class StockTable extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchStocks();
+    this.fetchStocksInterval = setInterval(() => this.props.fetchStocks(), 1000);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -23,6 +23,10 @@ class StockTable extends Component {
     });
   }
   
+  componentWillUnmount() {
+    clearInterval(this.fetchStocksInterval);
+  }
+
   handleInputChange = (id, market, e) => {
     const { value } = e.target;
     if (isNaN(value)) {

@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 class LineChart extends Component {
-  componentDidMount() {
-    this.renderLineChart();
+  componentWillUpdate(nextProps) {
+    this.emptyLineChart();
+    this.drawLineChart(nextProps);
   }
 
-  componentDidUpdate() {
-    this.renderLineChart();
+  emptyLineChart = () => {
+    const children = d3.selectAll("svg > *");
+    children.remove();
   }
-
-  renderLineChart = () => {
-    const { ids, byId } = this.props;
+    
+  drawLineChart = (nextProps) => {
+    const { ids, byId } = nextProps;
     if (ids.length === 0) {
       return;
     }
@@ -31,12 +33,16 @@ class LineChart extends Component {
     
     const yScale = d3.scaleLinear()
       .rangeRound([ height, 0 ])
-      .domain([ 0, d3.max(ids, (id) => byId[id].CAC40) ]);
+      .domain([ 0, d3.max(ids, (id) => Math.max(byId[id].CAC40, byId[id].NASDAQ)) ]);
 
     // Define the line
     const line = d3.line()
       .x((id, index) => xScale(index))
       .y((id) => yScale(byId[id].CAC40));
+
+    const line2 = d3.line()
+      .x((id, index) => xScale(index))
+      .y((id) => yScale(byId[id].NASDAQ));
     
     svg = svg.append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -53,24 +59,38 @@ class LineChart extends Component {
     // Add the line path
     svg.append("path")
       .data([ids])
+      .attr("class", "line")
       .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-width", "2px")
       .attr("d", line);
+    
+    svg.append("path")
+      .data([ids])
+      .attr("class", "line2")
+      .attr("fill", "none")
+      .attr("stroke", "darkorange")
+      .attr("stroke-width", "2px")
+      .attr("d", line2);
   }
 
   render() {
+    const { width, height } = this.props;
     return (
       <div>
-        <svg width="960" height="500"></svg>
+        <svg width={width} height={height}></svg>
       </div>
     );
   }
 }
 
 LineChart.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+  hasFetchFailed: PropTypes.bool.isRequired,
   ids: PropTypes.array.isRequired,
-  byId: PropTypes.object.isRequired
+  byId: PropTypes.object.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 };
 
 export default LineChart;
