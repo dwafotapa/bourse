@@ -2,7 +2,7 @@ import { fromJS, List, Map } from 'immutable';
 import * as actions from './actions';
 
 const initialState = {
-  isFetching: false,
+  isFetching: true,
   hasFetchFailed: false,
   ids: List(),
   byId: Map()

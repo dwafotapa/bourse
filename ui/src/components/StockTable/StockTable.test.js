@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import StockTable from './StockTable';
 
+jest.useFakeTimers();
+
 const setup = () => {
   const props = {
     isFetching: false,
@@ -41,7 +43,7 @@ describe('<StockTable/>', () => {
 
       expect(wrapper.find('div')).toHaveLength(1);
       expect(wrapper.find('div').text()).toEqual('Loading...');
-      expect(props.fetchStocks.mock.calls.length).toBe(1);
+      expect(setInterval.mock.calls.length).toBe(1);
     });
 
     it('should render a div element if the component has failed fetching data', () => {
@@ -50,7 +52,6 @@ describe('<StockTable/>', () => {
 
       expect(wrapper.find('div')).toHaveLength(1);
       expect(wrapper.find('div').text()).toEqual('Failed to fetch data. Please reload the page.');
-      expect(props.fetchStocks.mock.calls.length).toBe(1);
     });
 
     it('should render a <div/> element if the component has succeeded fetching data and no stocks were found', () => {
@@ -58,7 +59,6 @@ describe('<StockTable/>', () => {
 
       expect(wrapper.find('div')).toHaveLength(1);
       expect(wrapper.find('div').text()).toEqual('No stocks found.');
-      expect(props.fetchStocks.mock.calls.length).toBe(1);
     });
 
     it('should render a <table/> element and call fetchStocks() if the component has succeeded fetching data and stocks were found', () => {
@@ -66,7 +66,6 @@ describe('<StockTable/>', () => {
       wrapper.setProps(props);
       
       expect(wrapper.find('table')).toHaveLength(1);
-      expect(props.fetchStocks.mock.calls.length).toBe(1);
     });
   });
 

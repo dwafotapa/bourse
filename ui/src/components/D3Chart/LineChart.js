@@ -4,74 +4,67 @@ import * as d3 from 'd3';
 
 class LineChart extends Component {
   componentWillUpdate(nextProps) {
-    this.emptyLineChart();
-    this.drawLineChart(nextProps);
+    this.empty("svg > *");
+    this.draw(nextProps);
   }
 
-  emptyLineChart = () => {
-    const children = d3.selectAll("svg > *");
+  empty = (selection) => {
+    const children = d3.selectAll(selection);
     children.remove();
   }
-    
-  drawLineChart = (nextProps) => {
-    const { data } = nextProps;
+  
+  getDimensions = (width, height, margin) => {
+    return {
+      width: width - margin.left - margin.right,
+      height: height - margin.top - margin.bottom
+    }
+  }
+
+  draw = (nextProps) => {
+    const { margin, data, chartSeries, xDomain, yDomain } = nextProps;
     if (data.length === 0) {
       return;
     }
 
-    let svg = d3.select("svg");
+    const g = d3.select("svg")
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // Set the dimensions and margins of the graph
-    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-    const width = svg.attr("width") - margin.left - margin.right;
-    const height = svg.attr("height") - margin.top - margin.bottom;
+    // Get the dimensions of the graph
+    const { width, height } = this.getDimensions(nextProps.width, nextProps.height, margin);
 
     // Set the ranges and domains
     const xScale = d3.scaleLinear()
       .rangeRound([ 0, width ])
-      .domain([ 0, 19 ]);
+      .domain(xDomain);
     
     const yScale = d3.scaleLinear()
       .rangeRound([ height, 0 ])
-      .domain([ 0, d3.max(data, (item) => Math.max(item.CAC40, item.NASDAQ)) ]);
-
-    // Define the line
-    const line = d3.line()
-      .x((item, index) => xScale(index))
-      .y((item) => yScale(item.CAC40));
-
-    const line2 = d3.line()
-      .x((item, index) => xScale(index))
-      .y((item) => yScale(item.NASDAQ));
-    
-    svg = svg.append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .domain(yDomain);
       
     // Add the X axis
-    svg.append("g")
+    g.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(xScale));
     
     // Add the Y axis
-    svg.append("g")
+    g.append("g")
       .call(d3.axisLeft(yScale));
 
-    // Add the line path
-    svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", "2px")
-      .attr("d", line);
-    
-    svg.append("path")
-      .data([data])
-      .attr("class", "line2")
-      .attr("fill", "none")
-      .attr("stroke", "darkorange")
-      .attr("stroke-width", "2px")
-      .attr("d", line2);
+    chartSeries.forEach((chartSerie, index) => {
+      // Define the line
+      const line = d3.line()
+        .x((item, index) => xScale(index))
+        .y((item) => yScale(item[chartSerie.field]));
+        
+      // Add the line path
+      const path = g.append("path")
+        .data([data])
+        .attr("d", line);
+      for (const prop in chartSerie.style) {
+        path.attr(prop, chartSerie.style[prop]);
+      }
+    });
   }
 
   render() {
@@ -88,7 +81,10 @@ class LineChart extends Component {
 LineChart.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  chartSeries: PropTypes.array.isRequired,
+  xDomain: PropTypes.array.isRequired,
+  yDomain: PropTypes.array.isRequired
 };
 
 export default LineChart;
