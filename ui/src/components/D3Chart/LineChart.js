@@ -14,8 +14,8 @@ class LineChart extends Component {
   }
     
   drawLineChart = (nextProps) => {
-    const { ids, byId } = nextProps;
-    if (ids.length === 0) {
+    const { data } = nextProps;
+    if (data.length === 0) {
       return;
     }
 
@@ -33,16 +33,16 @@ class LineChart extends Component {
     
     const yScale = d3.scaleLinear()
       .rangeRound([ height, 0 ])
-      .domain([ 0, d3.max(ids, (id) => Math.max(byId[id].CAC40, byId[id].NASDAQ)) ]);
+      .domain([ 0, d3.max(data, (item) => Math.max(item.CAC40, item.NASDAQ)) ]);
 
     // Define the line
     const line = d3.line()
-      .x((id, index) => xScale(index))
-      .y((id) => yScale(byId[id].CAC40));
+      .x((item, index) => xScale(index))
+      .y((item) => yScale(item.CAC40));
 
     const line2 = d3.line()
-      .x((id, index) => xScale(index))
-      .y((id) => yScale(byId[id].NASDAQ));
+      .x((item, index) => xScale(index))
+      .y((item) => yScale(item.NASDAQ));
     
     svg = svg.append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -58,7 +58,7 @@ class LineChart extends Component {
 
     // Add the line path
     svg.append("path")
-      .data([ids])
+      .data([data])
       .attr("class", "line")
       .attr("fill", "none")
       .attr("stroke", "steelblue")
@@ -66,7 +66,7 @@ class LineChart extends Component {
       .attr("d", line);
     
     svg.append("path")
-      .data([ids])
+      .data([data])
       .attr("class", "line2")
       .attr("fill", "none")
       .attr("stroke", "darkorange")
@@ -77,20 +77,18 @@ class LineChart extends Component {
   render() {
     const { width, height } = this.props;
     return (
-      <div>
-        <svg width={width} height={height}></svg>
-      </div>
+      <svg
+        width={width}
+        height={height}
+      />
     );
   }
 }
 
 LineChart.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  hasFetchFailed: PropTypes.bool.isRequired,
-  ids: PropTypes.array.isRequired,
-  byId: PropTypes.object.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
+  data: PropTypes.array.isRequired
 };
 
 export default LineChart;

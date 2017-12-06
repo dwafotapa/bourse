@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { toJS } from '../../utils/to-js';
-import LineChart from './LineChart';
+import StockChart from './StockChart';
 import * as selectors from '../StockTable/selectors';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -11,4 +11,4 @@ const mapStateToProps = (state, ownProps) => ({
   byId: selectors.getById(state)
 });
 
-export default connect(mapStateToProps)(toJS(LineChart));
+export default connect(mapStateToProps)(toJS(StockChart));
