@@ -26,7 +26,7 @@ class LineChart extends Component {
       return;
     }
 
-    const g = d3.select("svg")
+    const svg = d3.select("svg")
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -41,16 +41,20 @@ class LineChart extends Component {
     const yScale = d3.scaleLinear()
       .rangeRound([ height, 0 ])
       .domain(yDomain);
-      
+    
     // Add the X axis
-    g.append("g")
+    svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(xScale));
     
     // Add the Y axis
-    g.append("g")
-      .call(d3.axisLeft(yScale));
-
+    svg.append("g")
+      .call(
+        d3.axisLeft(yScale)
+          .ticks(10)
+          .tickSize(-width)
+      );
+    
     chartSeries.forEach((chartSerie, index) => {
       // Define the line
       const line = d3.line()
@@ -58,7 +62,7 @@ class LineChart extends Component {
         .y((item) => yScale(item[chartSerie.field]));
         
       // Add the line path
-      const path = g.append("path")
+      const path = svg.append("path")
         .data([data])
         .attr("d", line);
       for (const prop in chartSerie.style) {
