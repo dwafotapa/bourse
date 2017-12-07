@@ -67,15 +67,15 @@ class StockTable extends Component {
   render() {
     const { ids, byId, byFrozenId } = this.state;
     const { isFetching, hasFetchFailed } = this.props;
-    if (isFetching) {
-      return <div>Loading...</div>;
-    }
-
     if (hasFetchFailed) {
       return <div>Failed to fetch data. Please reload the page.</div>;
     }
-
+    
     if (ids.length === 0) {
+      if (isFetching) {
+        return <div>Loading...</div>;
+      }
+
       return <div>No stocks found.</div>;
     }
 
@@ -91,7 +91,7 @@ class StockTable extends Component {
                   <StockCell
                     key={id}
                     id={id}
-                    prop={CAC40}
+                    marketProp={CAC40}
                     value={(byFrozenId[id] && byFrozenId[id].CAC40) || byId[id].CAC40}
                     handleInputFocus={this.handleInputFocus}
                     handleInputChange={this.handleInputChange}
@@ -108,7 +108,7 @@ class StockTable extends Component {
                   <StockCell
                     key={id}
                     id={id}
-                    prop={NASDAQ}
+                    marketProp={NASDAQ}
                     value={(byFrozenId[id] && byFrozenId[id].NASDAQ) || byId[id].NASDAQ}
                     handleInputFocus={this.handleInputFocus}
                     handleInputChange={this.handleInputChange}
