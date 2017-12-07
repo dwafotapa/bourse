@@ -1,4 +1,4 @@
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import reducer from './reducer';
 import * as actions from './actions';
 
@@ -21,7 +21,7 @@ describe('reducer', () => {
         timestamp: 1511342110039
       }
     }),
-    byFrozenId: new Map()
+    byFrozenId: Map()
   };
 
   describe('stocks()', () => {
