@@ -23,6 +23,7 @@ const setup = () => {
         timestamp: 123456789
       }
     },
+    byFrozenId: {},
     fetchStocks: jest.fn(),
     setStock: jest.fn()
   };
@@ -96,7 +97,7 @@ describe('<StockTable/>', () => {
       
       wrapper.instance().handleInputChange(1, 'CAC40', { target: { value: 'notanumber' } });
 
-      expect(wrapper.instance().state.byId[1].CAC40).toEqual(expectedValue);
+      expect(wrapper.instance().state.byFrozenId[1]).toEqual(undefined);
     });
 
     it('should update the local state if the input value is a number', () => {
@@ -106,7 +107,7 @@ describe('<StockTable/>', () => {
 
       wrapper.instance().handleInputChange(1, 'CAC40', { target: { value: expectedValue } });
 
-      expect(wrapper.instance().state.byId[1].CAC40).toBe(expectedValue);
+      expect(wrapper.instance().state.byFrozenId[1].CAC40).toBe(expectedValue);
     });
   });
 
@@ -141,15 +142,6 @@ describe('<StockTable/>', () => {
   });
 
   describe('handleInputBlur()', () => {
-    it('should do nothing if the local and redux states of the blurred input are in sync', () => {
-      const { props, wrapper } = setup();
-      wrapper.setProps(props);      
-      
-      wrapper.instance().handleInputBlur(1, 'CAC40');
-
-      expect(props.setStock.mock.calls.length).toBe(0);
-    });
-
     it('should dispatch a SET_STOCK action to update the redux state if the local and redux states of the blurred input are different', () => {
       const { props, wrapper } = setup();      
       wrapper.instance().state = {

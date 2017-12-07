@@ -8,9 +8,9 @@ class StockTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSyncOn: true,
       ids: [],
-      byId: {}
+      byId: {},
+      byFrozenId: {}
     };
   }
 
@@ -21,7 +21,8 @@ class StockTable extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       ids: [ ...nextProps.ids ],
-      byId: { ...nextProps.byId }
+      byId: { ...nextProps.byId },
+      byFrozenId: { ...nextProps.byFrozenId }
     });
   }
   
@@ -30,10 +31,7 @@ class StockTable extends Component {
   }
 
   handleInputFocus = () => {
-    this.setState((prevState) => {
-      clearInterval(this.fetchStocksInterval);
-      return { isSyncOn : false };
-    });
+    clearInterval(this.fetchStocksInterval);
   }
 
   handleInputChange = (id, market, e) => {
@@ -43,11 +41,13 @@ class StockTable extends Component {
     }
 
     this.setState((prevState) => ({
-      byId: {
-        ...prevState.byId,
+      byFrozenId: {
+        ...prevState.byFrozenId,
         [id]: {
-          ...prevState.byId[id],
-          [market]: value
+          ...prevState.byFrozenId[id],
+          id,
+          [market]: value,
+          timestamp: Date.now()
         }
       }
     }));
@@ -60,18 +60,12 @@ class StockTable extends Component {
   }
   
   handleInputBlur = (id, market) => {
-    this.setState((prevState) => {
-      this.fetchStocksInterval = setInterval(() => this.props.fetchStocks(), 1000);
-      return { isSyncOn : true };
-    });
-
-    if (this.state.byId[id][market] !== this.props.byId[id][market]) {
-      this.props.setStock(id, market, this.state.byId[id][market]);
-    }
+    this.props.setStock(this.state.byFrozenId);
+    this.fetchStocksInterval = setInterval(() => this.props.fetchStocks(), 1000);
   }
 
   render() {
-    const { ids, byId } = this.state;
+    const { ids, byId, byFrozenId } = this.state;
     const { isFetching, hasFetchFailed } = this.props;
     if (isFetching) {
       return <div>Loading...</div>;
@@ -98,7 +92,7 @@ class StockTable extends Component {
                     key={id}
                     id={id}
                     prop={CAC40}
-                    value={byId[id].CAC40}
+                    value={(byFrozenId[id] && byFrozenId[id].CAC40) || byId[id].CAC40}
                     handleInputFocus={this.handleInputFocus}
                     handleInputChange={this.handleInputChange}
                     handleInputKeyUp={this.handleInputKeyUp}
@@ -115,7 +109,7 @@ class StockTable extends Component {
                     key={id}
                     id={id}
                     prop={NASDAQ}
-                    value={byId[id].NASDAQ}
+                    value={(byFrozenId[id] && byFrozenId[id].NASDAQ) || byId[id].NASDAQ}
                     handleInputFocus={this.handleInputFocus}
                     handleInputChange={this.handleInputChange}
                     handleInputKeyUp={this.handleInputKeyUp}
@@ -136,6 +130,7 @@ StockTable.propTypes = {
   hasFetchFailed: PropTypes.bool.isRequired,
   ids: PropTypes.array.isRequired,
   byId: PropTypes.object.isRequired,
+  byFrozenId: PropTypes.object.isRequired,
   fetchStocks: PropTypes.func.isRequired
 };
 

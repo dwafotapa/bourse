@@ -108,17 +108,19 @@ describe('actions', () => {
 
   describe('setStock()', () => {
     it('should return a SET_STOCK action', () => {
-      const id = 1;
-      const market = 'CAC40';
-      const stock = 123.456789;
+      const byFrozenId = {
+        1: {
+          id: 1,
+          CAC40: 123.456789,
+          timestamp: 1234567890
+        }
+      }
       const expectedAction = {
         type: actions.SET_STOCK,
-        id,
-        market,
-        stock
+        byFrozenId
       };
       
-      const action = actions.setStock(id, market, stock);
+      const action = actions.setStock(byFrozenId);
 
       expect(action).toEqual(expectedAction);
     });

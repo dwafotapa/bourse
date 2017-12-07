@@ -8,7 +8,8 @@ const mapStateToProps = (state, ownProps) => ({
   isFetching: selectors.getIsFetching(state),
   hasFetchFailed: selectors.getHasFetchFailed(state),
   ids: selectors.getIds(state),
-  byId: selectors.getById(state)
+  byId: selectors.getById(state),
+  byFrozenId: selectors.getByFrozenId(state),
 });
 
 export default connect(mapStateToProps)(toJS(StockChart));

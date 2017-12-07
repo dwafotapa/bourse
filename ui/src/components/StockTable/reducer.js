@@ -5,7 +5,8 @@ const initialState = {
   isFetching: true,
   hasFetchFailed: false,
   ids: List(),
-  byId: Map()
+  byId: Map(),
+  byFrozenId: Map()
 };
 
 const stocks = (state = initialState, action) => {
@@ -33,7 +34,7 @@ const stocks = (state = initialState, action) => {
     case actions.SET_STOCK:
       return {
         ...state,
-        byId: state.byId.setIn([ action.id.toString(), action.market ], action.stock)
+        byFrozenId: fromJS(action.byFrozenId)
       };
     default:
       return state;

@@ -2,18 +2,14 @@ import { connect } from 'react-redux';
 import { toJS } from '../../utils/to-js';
 import StockTable from './StockTable';
 import { fetchStocks, setStock } from './actions';
-import {
-  getIsFetching,
-  getHasFetchFailed,
-  getIds,
-  getById
-} from './selectors';
+import * as selectors from './selectors';
 
 const mapStateToProps = (state) => ({
-  isFetching: getIsFetching(state),
-  hasFetchFailed: getHasFetchFailed(state),
-  ids: getIds(state),
-  byId: getById(state)
+  isFetching: selectors.getIsFetching(state),
+  hasFetchFailed: selectors.getHasFetchFailed(state),
+  ids: selectors.getIds(state),
+  byId: selectors.getById(state),
+  byFrozenId: selectors.getByFrozenId(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

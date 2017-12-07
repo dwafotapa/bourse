@@ -38,9 +38,7 @@ export const fetchStocks = () => {
   };
 };
 
-export const setStock = (id, market, stock) => ({
+export const setStock = (byFrozenId) => ({
   type: SET_STOCK,
-  id,
-  market,
-  stock
+  byFrozenId
 });

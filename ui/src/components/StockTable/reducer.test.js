@@ -20,7 +20,8 @@ describe('reducer', () => {
         CAC40: '22.22',
         timestamp: 1511342110039
       }
-    })
+    }),
+    byFrozenId: new Map()
   };
 
   describe('stocks()', () => {
@@ -76,25 +77,26 @@ describe('reducer', () => {
     });
 
     it('should handle SET_STOCK', () => {
+      const byFrozenId = {
+        1: {
+          id: 1,
+          NASDAQ: '11.11',
+          CAC40: '111.111',
+          timestamp: 1511342109035
+        },
+        2: {
+          id: 2,
+          NASDAQ: '22.22',
+          CAC40: '22.22',
+          timestamp: 1511342110039
+        }
+      };
       const expectedState = {
         ...initialState,
-        byId: fromJS({
-          1: {
-            id: 1,
-            NASDAQ: '11.11',
-            CAC40: '111.111',
-            timestamp: 1511342109035
-          },
-          2: {
-            id: 2,
-            NASDAQ: '22.22',
-            CAC40: '22.22',
-            timestamp: 1511342110039
-          }
-        })
+        byFrozenId: fromJS(byFrozenId)
       };
 
-      const state = reducer(initialState, { type: actions.SET_STOCK, id: 1, market: 'CAC40', stock: '111.111' });
+      const state = reducer(initialState, { type: actions.SET_STOCK, byFrozenId });
 
       expect(state).toEqual(expectedState);
     });

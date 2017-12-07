@@ -5,7 +5,7 @@ import LineChart from '../D3Chart/LineChart';
 import config from '../../config';
 
 const StockChart = (props) => {
-  const { width, height, margin, ids, byId } = props;
+  const { width, height, margin, ids, byId, byFrozenId } = props;
   const chartSeries = [
     {
       field: 'CAC40',
@@ -28,7 +28,12 @@ const StockChart = (props) => {
       }
     }
   ];
-  const stocks = ids.map((id) => byId[id]);
+  const stocks = ids.map((id) => ({
+    id,
+    NASDAQ: (byFrozenId[id] && byFrozenId[id].NASDAQ) || byId[id].NASDAQ,
+    CAC40: (byFrozenId[id] && byFrozenId[id].CAC40) || byId[id].CAC40,
+    timestamp: (byFrozenId[id] && byFrozenId[id].timestamp) || byId[id].timestamp
+  }));
   return (
     <div>
       <LineChart
