@@ -40,14 +40,14 @@ describe('<StockTable/>', () => {
   describe('render() / componentDidMount()', () => {
     it('should render a <div/> element if the component is fetching data', () => {
       const { props, wrapper } = setup();
-      wrapper.setProps({ isFetching: true });
+      wrapper.setProps({ isFetching: true, ids: [] });
 
       expect(wrapper.find('div')).toHaveLength(1);
       expect(wrapper.find('div').text()).toEqual('Loading...');
       expect(setInterval.mock.calls.length).toBe(1);
     });
 
-    it('should render a div element if the component has failed fetching data', () => {
+    it('should render a <div/> element if the component has failed fetching data', () => {
       const { props, wrapper } = setup();
       wrapper.setProps({ hasFetchFailed: true });
 
