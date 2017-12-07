@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StockCell from './StockCell/StockCell';
 import config from '../../config';
+import styles from './StockTable.css';
 
 class StockTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isSyncOn: true,
       ids: [],
       byId: {}
     };
@@ -25,6 +27,13 @@ class StockTable extends Component {
   
   componentWillUnmount() {
     clearInterval(this.fetchStocksInterval);
+  }
+
+  handleInputFocus = () => {
+    this.setState((prevState) => {
+      clearInterval(this.fetchStocksInterval);
+      return { isSyncOn : false };
+    });
   }
 
   handleInputChange = (id, market, e) => {
@@ -51,6 +60,11 @@ class StockTable extends Component {
   }
   
   handleInputBlur = (id, market) => {
+    this.setState((prevState) => {
+      this.fetchStocksInterval = setInterval(() => this.props.fetchStocks(), 1000);
+      return { isSyncOn : true };
+    });
+
     if (this.state.byId[id][market] !== this.props.byId[id][market]) {
       this.props.setStock(id, market, this.state.byId[id][market]);
     }
@@ -73,7 +87,7 @@ class StockTable extends Component {
 
     const { CAC40, NASDAQ } = config;
     return (
-      <div>
+      <div className={styles.StockTable}>
         <table>
           <tbody>
             <tr>
@@ -85,6 +99,7 @@ class StockTable extends Component {
                     id={id}
                     prop={CAC40}
                     value={byId[id].CAC40}
+                    handleInputFocus={this.handleInputFocus}
                     handleInputChange={this.handleInputChange}
                     handleInputKeyUp={this.handleInputKeyUp}
                     handleInputBlur={this.handleInputBlur}
@@ -101,6 +116,7 @@ class StockTable extends Component {
                     id={id}
                     prop={NASDAQ}
                     value={byId[id].NASDAQ}
+                    handleInputFocus={this.handleInputFocus}
                     handleInputChange={this.handleInputChange}
                     handleInputKeyUp={this.handleInputKeyUp}
                     handleInputBlur={this.handleInputBlur}

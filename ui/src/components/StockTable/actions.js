@@ -26,7 +26,7 @@ export const fetchStocksSuccess = (ids, byId) => ({
 export const fetchStocks = () => {
   return async (dispatch) => {
     dispatch(fetchStocksRequest());
-    const url = `${config.get('API_STOCKS_URL')}?count=${config.get('NUMBER_OF_VALUES')}`;
+    const url = `${config.get('API_STOCKS_URL')}?count=${config.NUMBER_OF_VALUES}`;
     try {
       const response = await fetch(url);
       const json = await handleErrors(response);

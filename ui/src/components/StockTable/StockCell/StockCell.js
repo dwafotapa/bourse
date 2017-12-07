@@ -2,34 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './StockCell.css';
 
-const StockCell = (props) => {
-  const {
-    id,
-    prop,
-    value,
-    handleInputChange,
-    handleInputKeyUp,
-    handleInputBlur
-  } = props;
-
-  return (
-    <td>
-      <input
-        type="text"
-        className={styles.StockCell}
-        value={value}
-        onChange={(e) => handleInputChange(id, prop, e)}
-        onKeyUp={(e) => handleInputKeyUp(e)}
-        onBlur={() => handleInputBlur(id, prop)}
-      />
-    </td>
-  );
-}
+const StockCell = (props) => (
+  <td>
+    <input
+      type="text"
+      className={styles.StockCell}
+      value={props.value}
+      onFocus={() => props.handleInputFocus()}
+      onChange={(e) => props.handleInputChange(props.id, props.prop, e)}
+      onKeyUp={(e) => props.handleInputKeyUp(e)}
+      onBlur={() => props.handleInputBlur(props.id, props.prop)}
+    />
+  </td>
+);
 
 StockCell.propTypes = {
   id: PropTypes.number.isRequired,
   prop: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
   handleInputChange: PropTypes.func.isRequired,
   handleInputKeyUp: PropTypes.func.isRequired,
   handleInputBlur: PropTypes.func.isRequired
